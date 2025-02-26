@@ -478,10 +478,14 @@ assets:
             visible: true
             events:
               - eventKey: OnPointerClick
-                code: |
+                code: >-
                   let screenPos = this.screenPosition;
 
+
                   //confirmPos(screenPos,1,1595,230,5,65);
+
+                  //HSDUASHDUASHDUAHD HELLO I AM HERE IN THE FILES DOING
+                  THINGS!!!!! 123456 OH YEAHHHH
                 arguments: {}
                 lib: core
               - eventKey: OnCreate
@@ -490,7 +494,7 @@ assets:
                 arguments: {}
                 lib: core
             extends: {}
-            lastmod: 1740108194842
+            lastmod: 1740530365705
             uid: T2GqWJBqN42km3
             behaviors: []
             extendTypes: ''
