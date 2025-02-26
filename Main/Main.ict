@@ -888,12 +888,12 @@ globalVars: []
 settings:
   authoring:
     author: carl & friends
-    site: 'https://ca-rl.github.io/DISCONNECT/'
-    title: disconnect wip
+    site: 'https://ca-rl.github.io/Dscnnct/'
+    title: disconnect
     version:
       - 0
       - 0
-      - 2
+      - 1
     versionPostfix: ''
     appId: ha.carl.disconnect
   rendering:
