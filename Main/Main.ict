@@ -1,0 +1,937 @@
+ctjsVersion: 5.2.1
+backups: 3
+language: typescript
+notes: ''
+libs:
+  keyboard.polyfill: {}
+  pointer.polyfill: {}
+  keyboard: {}
+  akatemplate:
+    toptop: ' '
+    botbot: ' '
+    csscss: ' '
+  random: {}
+  pointer:
+    startlocked: false
+  transition: {}
+  vgui: {}
+  tween: {}
+startroom: -1
+contentTypes: []
+actions:
+  - name: pan
+    methods:
+      - code: keyboard.KeyD
+      - code: keyboard.KeyA
+        multiplier: -1
+  - name: zoom
+    methods:
+      - code: keyboard.KeyW
+      - code: keyboard.KeyS
+        multiplier: -1
+scripts:
+  - name: zoom
+    code: |+
+
+      async function pcZoom(tile, originX, originY, speed, time)
+      {   
+          let transitioning = rooms.current.screenTransition;
+          let width = 1;
+          let loop = 0;
+          camera.drift = .96;
+          camera.moveTo(originX,originY);
+          await new Promise(resolve => setTimeout(resolve, 150));
+          for (let i = 1; i <= time; i++)
+          {
+              await new Promise(resolve => setTimeout(resolve, speed));
+              width = width-.005;
+              camera.scale.x = width;
+              camera.scale.y = width;
+              loop++;
+              if (loop == time)
+              {
+                  camera.scale.x = 1;
+                  camera.scale.y = 1;
+                  camera.drift = 0;
+                  camera.moveTo(tile*1280+640,-1080);
+                  rooms.current.screenTransition = false;
+                  
+              }
+          }
+      }
+
+      function confirmPos(position, tile, originX, originY,speed, time)
+      {
+          let transitioning = rooms.current.screenTransition;
+          if (rooms.current.pos == position && transitioning == false)
+          {
+              pcZoom(tile, originX, originY, speed, time);
+              rooms.current.layer +=1;
+              rooms.current.screenTransition = true;
+          }
+          else
+          {
+              console.error("attempted screen change during transition at pos: "+rooms.current.pos+"\nOR attempted pc screen transition during playing animation");
+          }
+      }
+
+  - name: Move Camera
+    code: |+
+
+      function move(leftBound, rightBound)
+      {   
+          camera.drift = .95;
+
+          if (actions.pan.value == -1)
+          {
+              rooms.current.pos -= 1;
+              if (rooms.current.pos >= leftBound)
+              {
+              camera.moveTo(1280*rooms.current.pos+640,camera.y);
+              }
+              else
+              {
+                  rooms.current.pos = leftBound;
+              }
+          }
+          else if (actions.pan.value == 1 && rooms.current.pos <= rightBound)
+          {
+              rooms.current.pos += 1;
+              if (rooms.current.pos < rightBound)
+              {
+              camera.moveTo(1280*rooms.current.pos+640,camera.y);
+              }
+              else
+              {
+                  rooms.current.pos = rightBound;
+              }
+          }
+      }
+
+      function depthTest(deepness,left,right)
+      {
+          if (deepness == left)
+          {
+              move(left,right);
+          }
+          else if (deepness == right)
+          {
+              move(left,right-1);
+          }
+          else{
+              console.error("depth offset: "+deepness);
+          }
+          
+      }
+
+assets:
+  - type: folder
+    uid: h5bL329W8w6f2Q
+    colorClass: accent1
+    icon: help-circle
+    name: Backgrounds
+    lastmod: 1739654608905
+    entries:
+      - lastmod: 1739657583092
+        type: texture
+        name: Desk1
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1280
+        imgHeight: 720
+        width: 1280
+        height: 720
+        offx: 0
+        offy: 0
+        origname: iJNf82JnFLWqmJm.png
+        shape: rect
+        left: 0
+        right: 1280
+        top: 0
+        bottom: 720
+        uid: JNf82JnFLWqmJm
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\Desk2 markup-0-0.png'
+        tiled: true
+      - lastmod: 1739657516321
+        type: texture
+        name: Desk2
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1280
+        imgHeight: 720
+        width: 1280
+        height: 720
+        offx: 0
+        offy: 0
+        origname: iNL66MB6z9nFFtd.png
+        shape: rect
+        left: 0
+        right: 1280
+        top: 0
+        bottom: 720
+        uid: NL66MB6z9nFFtd
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\Desk2 markup-1-0.png'
+        tiled: true
+      - lastmod: 1739733499614
+        type: texture
+        name: Computer_markup
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1280
+        imgHeight: 720
+        width: 1280
+        height: 720
+        offx: 0
+        offy: 0
+        origname: iR4hbT8w4Ttwk4T.png
+        shape: rect
+        left: 0
+        right: 1280
+        top: 0
+        bottom: 720
+        uid: R4hbT8w4Ttwk4T
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\Computer markup.png'
+        tiled: true
+      - lastmod: 1739689839130
+        type: texture
+        name: desktop_markup_1
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1280
+        imgHeight: 720
+        width: 1280
+        height: 720
+        offx: 0
+        offy: 0
+        origname: iJ4p9z1LP59nTQq.png
+        shape: rect
+        left: 0
+        right: 1280
+        top: 0
+        bottom: 720
+        uid: J4p9z1LP59nTQq
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\desktop markup 1.png'
+        tiled: true
+      - lastmod: 1739735754578
+        type: texture
+        name: Window_closeup
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1280
+        imgHeight: 720
+        width: 1280
+        height: 720
+        offx: 0
+        offy: 0
+        origname: iWrc8DK8B9KzmbH.png
+        shape: rect
+        left: 0
+        right: 1280
+        top: 0
+        bottom: 720
+        uid: Wrc8DK8B9KzmbH
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\Window closeup.png'
+        tiled: true
+      - lastmod: 1739735617918
+        type: texture
+        name: Workspace_1
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 6400
+        imgHeight: 720
+        width: 6400
+        height: 720
+        offx: 0
+        offy: 0
+        origname: iCGmHr35j11QgGP.png
+        shape: rect
+        left: 0
+        right: 6400
+        top: 0
+        bottom: 720
+        uid: CGmHr35j11QgGP
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\Workspace 1.png'
+        tiled: true
+      - lastmod: 1739737135756
+        type: texture
+        name: window_p-d_2.0
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 974
+        imgHeight: 685
+        width: 974
+        height: 685
+        offx: 0
+        offy: 0
+        origname: iGL4RHj5DWBcPr2.png
+        shape: rect
+        left: 0
+        right: 974
+        top: 0
+        bottom: 685
+        uid: GL4RHj5DWBcPr2
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Downloads\window_p-d_2.0.PNG'
+        tiled: true
+      - lastmod: 1739745387777
+        type: texture
+        name: background_placeholder
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1800
+        imgHeight: 1579
+        width: 1800
+        height: 1579
+        offx: 0
+        offy: 0
+        origname: ig9nCKB7zrHF1Wk.png
+        shape: rect
+        left: 0
+        right: 1800
+        top: 0
+        bottom: 1579
+        uid: g9nCKB7zrHF1Wk
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Downloads\background_placeholder.PNG'
+        tiled: true
+      - lastmod: 1739745802351
+        type: texture
+        name: Blank_background
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 6400
+        imgHeight: 6400
+        width: 6400
+        height: 6400
+        offx: 0
+        offy: 0
+        origname: iktwHqMMmN6cQN6.png
+        shape: rect
+        left: 0
+        right: 6400
+        top: 0
+        bottom: 6400
+        uid: ktwHqMMmN6cQN6
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\Blank background.png'
+        tiled: true
+  - type: folder
+    uid: hBf2CzzbMLgwf9
+    colorClass: warning
+    icon: help-circle
+    name: Interactable Textures
+    lastmod: 1739678930714
+    entries:
+      - type: template
+        baseClass: AnimatedSprite
+        name: Arrow return
+        depth: 0
+        texture: M2TpgC68qjrgN3
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnPointerClick
+            code: |-
+              camera.drift = 0;
+              camera.moveTo(1280*rooms.current.pos+640,camera.y+1080+360);
+              rooms.current.layer -=1;
+            arguments: {}
+            lib: core
+        extends: {}
+        lastmod: 1739752315516
+        uid: 8mgT63z1k4Jzd1
+        behaviors: []
+        extendTypes: ''
+      - type: template
+        baseClass: AnimatedSprite
+        name: Arrow go right
+        depth: 0
+        texture: M2TpgC68qjrgN3
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnPointerClick
+            code: ''
+            arguments: {}
+            lib: core
+        extends: {}
+        lastmod: 1740185134285
+        uid: MdTHTmR9cqfm92
+        behaviors: []
+        extendTypes: ''
+      - type: template
+        baseClass: AnimatedSprite
+        name: Arrow go left
+        depth: 0
+        texture: M2TpgC68qjrgN3
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnPointerClick
+            code: ''
+            arguments: {}
+            lib: core
+        extends: {}
+        lastmod: 1740182477013
+        uid: L7Rjgb8PBqCct9
+        behaviors: []
+        extendTypes: ''
+      - type: folder
+        uid: mh3BNmg2Htg96z
+        colorClass: act
+        icon: help-circle
+        name: Backgrounds
+        lastmod: 1740182618563
+        entries:
+          - type: template
+            baseClass: Button
+            name: Window
+            depth: 0
+            texture: dLnn8bMGtJ6b34
+            playAnimationOnStart: false
+            loopAnimation: true
+            animationFPS: 30
+            visible: true
+            events:
+              - eventKey: OnPointerClick
+                code: |
+                  let screenPos = this.screenPosition;
+
+                  //confirmPos(screenPos,1,1595,230,5,65);
+                arguments: {}
+                lib: core
+              - eventKey: OnCreate
+                code: |
+                  this.screenPosition = 1;
+                arguments: {}
+                lib: core
+            extends: {}
+            lastmod: 1740108194842
+            uid: T2GqWJBqN42km3
+            behaviors: []
+            extendTypes: ''
+            defaultText: ''
+            textStyle: -1
+            nineSliceSettings:
+              top: 16
+              left: 16
+              bottom: 16
+              right: 16
+              autoUpdate: false
+            hoverTexture: -1
+            pressedTexture: -1
+            disabledTexture: -1
+          - type: template
+            baseClass: Button
+            name: desk_screen
+            depth: 0
+            texture: 9zHLPGQkb79w8H
+            playAnimationOnStart: false
+            loopAnimation: true
+            animationFPS: 30
+            visible: true
+            events:
+              - eventKey: OnPointerClick
+                code: |
+                  let screenPos = this.screenPosition;
+                  confirmPos(screenPos,0,613,301,7,100);
+                arguments: {}
+                lib: core
+              - eventKey: OnCreate
+                code: |
+                  this.screenPosition = 0;
+                arguments: {}
+                lib: core
+            extends: {}
+            lastmod: 1739752313604
+            uid: 6zBwtpq62fNTzJ
+            behaviors: []
+            extendTypes: ''
+            defaultText: ''
+            textStyle: -1
+            nineSliceSettings:
+              top: 16
+              left: 16
+              bottom: 16
+              right: 16
+              autoUpdate: false
+            hoverTexture: -1
+            pressedTexture: -1
+            disabledTexture: -1
+  - type: folder
+    uid: DLcJ66mcCT5wLB
+    colorClass: text
+    icon: help-circle
+    name: Behaviors
+    lastmod: 1739731662652
+    entries:
+      - type: behavior
+        name: camera movement
+        behaviorType: room
+        events:
+          - eventKey: OnActionPress
+            code: |
+              depthTest(rooms.current.layer,0,2);
+            arguments:
+              action: pan
+            lib: core
+          - eventKey: OnRoomStart
+            code: |
+              this.layer = 0;
+              this.pos = 0;
+              this.screenTransition = false;
+            arguments: {}
+            lib: core
+        specification: []
+        extendTypes: ''
+        lastmod: 1740182319931
+        uid: GWW4cQM2RhGDgz
+  - type: folder
+    uid: nfLh8QnhrMqC4L
+    colorClass: error
+    icon: help-circle
+    name: Rooms
+    lastmod: 1739731685096
+    entries:
+      - type: room
+        oncreate: ''
+        onstep: ''
+        ondraw: ''
+        onleave: ''
+        gridX: 64
+        gridY: 64
+        diagonalGrid: false
+        disableGrid: false
+        simulate: true
+        width: 1280
+        height: 720
+        restrictCamera: false
+        restrictMaxX: 1280
+        restrictMinX: 0
+        restrictMaxY: 720
+        restrictMinY: 0
+        isUi: false
+        name: Office
+        backgroundColor: '#000000'
+        follow: -1
+        backgrounds:
+          - depth: -1
+            texture: J4p9z1LP59nTQq
+            shiftX: 0
+            shiftY: -1440
+            parallaxX: 1
+            parallaxY: 1
+            movementX: 0
+            movementY: 0
+            scaleX: 1
+            scaleY: 1
+            repeat: no-repeat
+          - depth: -3
+            texture: CGmHr35j11QgGP
+            shiftX: 0
+            shiftY: 0
+            parallaxX: 1
+            parallaxY: 1
+            movementX: 0
+            movementY: 0
+            scaleX: 1
+            scaleY: 1
+            repeat: no-repeat
+          - depth: 0
+            texture: GL4RHj5DWBcPr2
+            shiftX: 1280
+            shiftY: -1440
+            parallaxX: 1
+            parallaxY: 1
+            movementX: 0
+            movementY: 0
+            scaleX: 1
+            scaleY: 1
+            repeat: no-repeat
+        copies:
+          - x: 290
+            'y': 124
+            opacity: 0
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 6zBwtpq62fNTzJ
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 320
+            'y': -790
+            opacity: 0.97
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 8mgT63z1k4Jzd1
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 1170.72700333
+            'y': 3.56122345
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 0.7
+              'y': 0.7
+            rotation: 0
+            uid: T2GqWJBqN42km3
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 1600
+            'y': -790
+            opacity: 0.97
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 1
+            rotation: 0
+            uid: 8mgT63z1k4Jzd1
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 1216
+            'y': 704
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 0.10921502
+              'y': 1
+            rotation: -1.5707963267948966
+            uid: MdTHTmR9cqfm92
+            exts: {}
+            customProperties: {}
+            bindings: {}
+          - x: 1345.593827
+            'y': 641.48254373
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 0.10921502
+              'y': 1
+            rotation: 1.5707963267948966
+            uid: L7Rjgb8PBqCct9
+            exts: {}
+            customProperties: {}
+            bindings: {}
+        tiles:
+          - depth: -1
+            tiles: []
+            extends: {}
+            hidden: false
+            cache: false
+          - depth: -2
+            tiles:
+              - x: 1758.89199477
+                'y': -1095.84512375
+                opacity: 1
+                tint: 16777215
+                scale:
+                  x: 0.91333185
+                  'y': 0.73436273
+                frame: 0
+                rotation: 0
+                texture: bR3Gk1K3KFL55T
+              - x: 1513.39275474
+                'y': 240.53186064
+                opacity: 1
+                tint: 16777215
+                scale:
+                  x: 0.62200021
+                  'y': 0.51677377
+                frame: 0
+                rotation: 0
+                texture: bR3Gk1K3KFL55T
+            extends: {}
+            hidden: false
+            cache: true
+          - depth: -3
+            tiles: []
+            extends: {}
+            hidden: false
+            cache: true
+        extends:
+          bgBoolean: 0
+        lastmod: 1740108498988
+        events: []
+        behaviors:
+          - GWW4cQM2RhGDgz
+        extendTypes: ''
+        uid: h924qJ1fbzk47T
+        lastPickedTileset: ktwHqMMmN6cQN6
+  - type: folder
+    uid: FrwcGHc9L4Lkt9
+    colorClass: accent1
+    icon: help-circle
+    name: Textures
+    lastmod: 1739679007059
+    entries:
+      - lastmod: 1739690417164
+        type: texture
+        name: desk_screen
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 322
+          - 179
+        marginx: 0
+        marginy: 0
+        imgWidth: 644
+        imgHeight: 358
+        width: 644
+        height: 358
+        offx: 0
+        offy: 0
+        origname: i9zHLPGQkb79w8H.png
+        shape: rect
+        left: 322
+        right: 322
+        top: 179
+        bottom: 179
+        uid: 9zHLPGQkb79w8H
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\desk screen markup-0-0.png'
+      - lastmod: 1739680399238
+        type: texture
+        name: arrow_markup
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 586
+        imgHeight: 72
+        width: 586
+        height: 72
+        offx: 0
+        offy: 0
+        origname: iM2TpgC68qjrgN3.png
+        shape: rect
+        left: 0
+        right: 586
+        top: 0
+        bottom: 72
+        uid: M2TpgC68qjrgN3
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Desktop\Gimp Files\arrow markup.png'
+      - lastmod: 1739736931825
+        type: texture
+        name: Window
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 497
+          - 351
+        marginx: 0
+        marginy: 0
+        imgWidth: 974
+        imgHeight: 685
+        width: 974
+        height: 685
+        offx: 0
+        offy: 0
+        origname: idLnn8bMGtJ6b34.png
+        shape: rect
+        left: 498
+        right: 482
+        top: 349
+        bottom: 341
+        uid: dLnn8bMGtJ6b34
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Downloads\window_p-d_2.0.PNG'
+        stripPoints:
+          - x: 477.4098360655738
+            'y': 333.655737704918
+          - x: -482.6885245901639
+            'y': 326.5737704918033
+          - x: -488.16393442622956
+            'y': -339.72131147540983
+          - x: 472.7540983606558
+            'y': -341.9508196721311
+        closedStrip: true
+        symmetryStrip: false
+      - lastmod: 1739747490517
+        type: texture
+        name: 2425ab40-5a75-4209-96aa-8eaa439b20c9.webp
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 512
+          - 431
+        marginx: 0
+        marginy: 0
+        imgWidth: 1024
+        imgHeight: 1024
+        width: 1024
+        height: 862
+        offx: 0
+        offy: 0
+        origname: ibR3Gk1K3KFL55T.png
+        shape: rect
+        left: 512
+        right: 512
+        top: 431
+        bottom: 431
+        uid: bR3Gk1K3KFL55T
+        padding: 1
+        isBlank: false
+        source: 'C:\Users\Carl\Downloads\2425ab40-5a75-4209-96aa-8eaa439b20c9.webp'
+globalVars: []
+settings:
+  authoring:
+    author: carl & friends
+    site: 'https://ca-rl.github.io/DISCONNECT/'
+    title: disconnect wip
+    version:
+      - 0
+      - 0
+      - 2
+    versionPostfix: ''
+    appId: ha.carl.disconnect
+  rendering:
+    usePixiLegacy: true
+    transparent: false
+    maxFPS: 60
+    pixelatedrender: false
+    highDensity: true
+    desktopMode: maximized
+    hideCursor: false
+    mobileScreenOrientation: unspecified
+    viewMode: scaleFit
+  export:
+    showErrors: true
+    errorsLink: ''
+    autocloseDesktop: true
+    windows: true
+    linux: true
+    mac: true
+    functionWrap: false
+    codeModifier: none
+    bundleAssetTree: false
+    bundleAssetTypes:
+      texture: true
+      template: true
+      room: true
+      behavior: false
+      typeface: false
+      sound: false
+      style: false
+      tandem: false
+      script: false
+      enum: false
+  branding:
+    accent: '#DB8383'
+    invertPreloaderScheme: true
+    icon: -1
+    splashScreen: -1
+    forceSmoothIcons: false
+    forceSmoothSplashScreen: false
+    hideLoadingLogo: false
+    alternativeLogo: false
+    customLoadingText: ''
+  fps: 30
+palette: []
