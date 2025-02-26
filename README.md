@@ -1,4 +1,1 @@
-# REAMED
-# its a play on read me but the d is shifted
-# lollers
-# testing out descriptions in the webhooks
+#im so cool, so swag and awesome. yeah thats true? Yep ye[p yeo]
