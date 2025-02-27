@@ -30,7 +30,7 @@ actions:
       - code: keyboard.KeyS
         multiplier: -1
 scripts:
-  - name: zoom
+  - name: Zoom In
     code: |+
 
       async function pcZoom(tile, originX, originY, speed, time)
@@ -124,6 +124,8 @@ scripts:
           
       }
 
+  - name: Just some common variables
+    code: var uiUp = false;
 assets:
   - type: folder
     uid: h5bL329W8w6f2Q
@@ -478,23 +480,29 @@ assets:
             visible: true
             events:
               - eventKey: OnPointerClick
-                code: >-
-                  let screenPos = this.screenPosition;
-
+                code: |
+                  //let screenPos = this.screenPosition;
 
                   //confirmPos(screenPos,1,1595,230,5,65);
-
-                  //HSDUASHDUASHDUAHD HELLO I AM HERE IN THE FILES DOING
-                  THINGS!!!!! 123456 OH YEAHHHH
+                  function plants()
+                  {
+                      if (uiUp == false)
+                  {
+                      uiUp = true;
+                  }
+                  }
+                  console.log(uiUp);
+                  plants();
+                  console.log(uiUp);
                 arguments: {}
                 lib: core
               - eventKey: OnCreate
                 code: |
-                  this.screenPosition = 1;
+                  //this.screenPosition = 1;
                 arguments: {}
                 lib: core
             extends: {}
-            lastmod: 1740530365705
+            lastmod: 1740622661900
             uid: T2GqWJBqN42km3
             behaviors: []
             extendTypes: ''
@@ -546,6 +554,25 @@ assets:
             hoverTexture: -1
             pressedTexture: -1
             disabledTexture: -1
+      - type: template
+        baseClass: AnimatedSprite
+        name: Placeholder
+        depth: 0
+        texture: Wd9hgCtGTJ8Qwt
+        playAnimationOnStart: false
+        loopAnimation: true
+        animationFPS: 30
+        visible: true
+        events:
+          - eventKey: OnStep
+            lib: core
+            code: this.move();
+            arguments: {}
+        extends: {}
+        lastmod: 1740609731058
+        uid: J48J3KzqRb6bWR
+        behaviors: []
+        extendTypes: ''
   - type: folder
     uid: DLcJ66mcCT5wLB
     colorClass: text
@@ -574,6 +601,14 @@ assets:
         extendTypes: ''
         lastmod: 1740182319931
         uid: GWW4cQM2RhGDgz
+      - type: behavior
+        name: UI layer
+        behaviorType: room
+        events: []
+        specification: []
+        extendTypes: ''
+        lastmod: 1740607410727
+        uid: N5Mbcgzp8HQ6FK
   - type: folder
     uid: nfLh8QnhrMqC4L
     colorClass: error
@@ -661,7 +696,7 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
-          - x: 1170.72700333
+          - x: 1276.72700333
             'y': 3.56122345
             opacity: 1
             tint: 16777215
@@ -709,6 +744,18 @@ assets:
             exts: {}
             customProperties: {}
             bindings: {}
+          - x: 1280
+            'y': 704
+            opacity: 1
+            tint: 16777215
+            scale:
+              x: 1
+              'y': 2
+            rotation: 0
+            uid: J48J3KzqRb6bWR
+            exts: {}
+            customProperties: {}
+            bindings: {}
         tiles:
           - depth: -1
             tiles: []
@@ -727,7 +774,7 @@ assets:
                 frame: 0
                 rotation: 0
                 texture: bR3Gk1K3KFL55T
-              - x: 1513.39275474
+              - x: 1619.39275474
                 'y': 240.53186064
                 opacity: 1
                 tint: 16777215
@@ -747,7 +794,7 @@ assets:
             cache: true
         extends:
           bgBoolean: 0
-        lastmod: 1740108498988
+        lastmod: 1740622665525
         events: []
         behaviors:
           - GWW4cQM2RhGDgz
@@ -884,6 +931,33 @@ assets:
         padding: 1
         isBlank: false
         source: 'C:\Users\Carl\Downloads\2425ab40-5a75-4209-96aa-8eaa439b20c9.webp'
+      - lastmod: 1740609716378
+        type: texture
+        name: Placeholder
+        untill: 0
+        grid:
+          - 1
+          - 1
+        axis:
+          - 0
+          - 0
+        marginx: 0
+        marginy: 0
+        imgWidth: 1280
+        imgHeight: 64
+        width: 1280
+        height: 64
+        offx: 0
+        offy: 0
+        origname: iWd9hgCtGTJ8Qwt.png
+        shape: rect
+        left: 0
+        right: 1280
+        top: 0
+        bottom: 64
+        uid: Wd9hgCtGTJ8Qwt
+        padding: 1
+        isBlank: false
 globalVars: []
 settings:
   authoring:
